@@ -11,7 +11,7 @@ runs:
   steps:
     - id: generate-tests
       name: generate-tests
-      uses: docker:python:3.9
+      uses: docker://python:3.9
       shell: sh
       env:
         OPENAI_API_KEY: ${{ inputs.token }}
