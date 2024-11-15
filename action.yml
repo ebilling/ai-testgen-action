@@ -1,0 +1,19 @@
+apiVersion: automation.cloudbees.io/v1alpha1
+kind: action
+name: "Test Generation Action"
+inputs:
+  token:
+    description: 'AI engine token'
+    required: true
+
+runs:
+  using: composite
+  steps:
+    - id: generate-tests
+      name: generate-tests
+      uses: docker:python:3.9
+      shell: sh
+      env:
+        OPENAI_API_KEY: ${{ inputs.token }}
+      run: |
+        python3 testgen.py
