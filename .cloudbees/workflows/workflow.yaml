@@ -17,12 +17,14 @@ jobs:
         uses: cloudbees-io/checkout@v1
       - id: build
         name: Build, scan and push to test harbor
-        uses: calculi-corp/cb-internal-shared-actions/build/action@v3
+        uses: calculi-corp/cb-internal-shared-actions/build/security-action@v3
         with:
+          run-unit-test: "false"
+          snyk-org-name: ${{ vars.SNYK_SAAS_ORG_NAME }}
+          snyk-saas-token: ${{ secrets.SNYK_SAAS_TOKEN }}
           registry-url: ${{ vars.STAGING_ECR_REGISTRY }}
-          registry-image-name: ${{ vars.workflow_execution_env == 'production' && 'actions/test-generation-actions' || 'throwaway/actions/test-generation-actions' }}
+          registry-image-name: ${{ vars.workflow_execution_env == 'production' && 'actions/ai-testgen-actions' || 'throwaway/actions/ai-testgen-actions' }}
           docker-file: Dockerfile
           oidc-iam-role: ${{ vars.oidc_staging_iam_role }}
           kaniko-build: "true"
-          action: "ai_testgen_action"
-          trufflehog-scan-container: "true"
+          action: ai-testgen-action
