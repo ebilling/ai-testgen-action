@@ -11,7 +11,7 @@ runs:
   steps:
     - id: generate-tests
       name: generate-tests
-      uses: docker://python:3.9
+      uses: docker://public.ecr.aws/l7o7z1g8/actions/ai_testgen_action:latest
       shell: sh
       env:
         OPENAI_API_KEY: ${{ inputs.token }}

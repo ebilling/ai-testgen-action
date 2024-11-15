@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import subprocess
 import requests
 import os
@@ -19,7 +21,7 @@ class TestGenerator:
    def __init__(self):
        self.api_key = os.getenv('OPENAI_API_KEY')
        self.model = os.getenv('OPENAI_MODEL', 'o1-preview')
-      
+
        try:
            self.max_tokens = int(os.getenv('OPENAI_MAX_TOKENS', '10000'))
        except ValueError:
@@ -65,11 +67,11 @@ class TestGenerator:
            'Go': 'testing'
        }
        return frameworks.get(language, 'unknown')
-  
+
    def get_related_files(self, language: str, file_name: str) -> List[str]:
        """Identify related files based on import statements or includes."""
        related_files = []
-      
+
        try:
            if language in ["Python", "JavaScript", "TypeScript"]:
                with open(file_name, 'r') as f:
@@ -112,7 +114,7 @@ class TestGenerator:
 
        except Exception as e:
            logging.error(f"Error identifying related files in {file_name}: {e}")
-      
+
        return related_files
 
 
@@ -161,7 +163,7 @@ class TestGenerator:
 
        except Exception as e:
            logging.error(f"Error identifying related test files in {file_name}: {e}")
-      
+
        # Limit to the first related test file to avoid excessive processing
        limited_test_files = related_test_files[:1]
        return limited_test_files
@@ -354,7 +356,7 @@ Generate only the test code without any explanations or notes."""
         'Content-Type': 'application/json',
         'Authorization': f'Bearer {self.api_key}'
     }
-   
+
     data = {
         'model': self.model,
         'messages': [
@@ -391,7 +393,7 @@ Generate only the test code without any explanations or notes."""
         return None
 
 
-      
+
    def save_test_cases(self, file_name: str, test_cases: str, language: str) -> Optional[Path]:
        """Save generated test cases to appropriate directory structure."""
        tests_dir = Path('generated_tests')
@@ -470,10 +472,10 @@ Generate only the test code without any explanations or notes."""
 
                logging.info(f"Processing {file_name} ({language})")
                prompt = self.create_prompt(file_name, language)
-              
+
                if prompt:
                    test_cases = self.call_openai_api(prompt)
-                  
+
                    if test_cases:
                        test_cases = test_cases.replace("“", '"').replace("”", '"')
                        self.ensure_coverage_installed(language)
